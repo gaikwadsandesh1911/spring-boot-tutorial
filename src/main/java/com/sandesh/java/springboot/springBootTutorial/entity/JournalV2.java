@@ -10,7 +10,7 @@ import java.util.Date;
 @Document(collection = "journals")
 public class JournalV2 {
     @Id
-    private ObjectId id;
+    private ObjectId id;    // ObjecetId is bson from mongoDB
     private String title;
     private String content;
     private LocalDateTime date;

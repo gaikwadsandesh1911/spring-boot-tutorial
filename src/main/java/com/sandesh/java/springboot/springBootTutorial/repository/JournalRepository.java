@@ -13,4 +13,6 @@ public interface JournalRepository extends MongoRepository<JournalV2, ObjectId> 
 
     those method as well. to implement business logic in service layer.
 
+    MongoRepository<Pojo, id type of Pojo>
+
  */

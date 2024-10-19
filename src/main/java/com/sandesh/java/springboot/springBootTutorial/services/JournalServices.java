@@ -17,7 +17,7 @@ public class JournalServices {
     // it's an interface so, it's implementation will write here. we have pre-built methods MangoRepository
 
     public void saveEntry(JournalV2 journalV2) {
-        journalRepository.save(journalV2);
+        journalRepository.save(journalV2);  // save() is from spring data jpa
     }
 
     public List<JournalV2> getAllEntries() {
@@ -29,10 +29,9 @@ public class JournalServices {
     }
 
     public void deleteEntryById(ObjectId id) {
-        if(journalRepository.existsById(id)){
+        if (journalRepository.existsById(id)) {
             journalRepository.deleteById(id);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Entry with ID " + id + " does not exist.");
         }
 
