@@ -1,0 +1,9 @@
+package com.sandesh.java.springboot.springBootTutorial.repository;
+
+import com.sandesh.java.springboot.springBootTutorial.entity.User;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface UserRepository extends MongoRepository<User, ObjectId> {
+    User findByUsername(String username);   // create custom method.
+}
