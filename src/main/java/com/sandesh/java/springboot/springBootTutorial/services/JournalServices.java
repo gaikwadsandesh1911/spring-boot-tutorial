@@ -6,7 +6,9 @@ import com.sandesh.java.springboot.springBootTutorial.repository.JournalReposito
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,13 +22,22 @@ public class JournalServices {
     @Autowired
     private UserServices userServices;
 
+    @Transactional
     public void saveEntry(JournalV2 journalV2, String username) {
-        User user = userServices.findUserByUsername(username);
-        JournalV2 saved = journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
-        user.getJournalEntries().add(saved);    // add entry ref(_id) to user's journalEntries field
-        userServices.saveUser(user);    // save the entry in users collection
+        try {
+            User user = userServices.findUserByUsername(username);
+            journalV2.setDate(LocalDateTime.now());
+            JournalV2 saved = journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
+            user.getJournalEntries().add(saved);    // add entry ref(_id) to user's journalEntries field
+//            user.setUsername(null);
+            userServices.saveUser(user);    // save the entry in users collection
+        }catch (Exception e){
+            System.out.println("exception => "+ e);
+            throw new RuntimeException("an error occurred while saving journal entry", e);
+        }
     }
 
+    // this is for updating entry
     public void saveEntry(JournalV2 journalV2) {
        journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
     }

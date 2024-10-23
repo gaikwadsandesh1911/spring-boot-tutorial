@@ -32,19 +32,19 @@ public class JournalControllerV2 {
         return new ResponseEntity<>(allEntries, HttpStatus.OK);
     }
 
-    @PostMapping("/user/{username}")
+    @PostMapping("/journal/{username}")
     public ResponseEntity<?> createEntry(@RequestBody JournalV2 newEntry, @PathVariable String username) {
         try {
-            newEntry.setDate(LocalDateTime.now());
+//            newEntry.setDate(LocalDateTime.now());
             journalServices.saveEntry(newEntry, username);
             return new ResponseEntity<>(newEntry, HttpStatus.CREATED);
         } catch (Exception e) {
-//            System.out.println(e);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            System.out.println("exception "+ e.getMessage());
+            return new ResponseEntity<>("Error while creating entry", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping("/user/{username}")
+    @GetMapping("/journal/{username}")
     public ResponseEntity<?> getAllJournalsOfUser(@PathVariable String username) {
         User user = userServices.findUserByUsername(username);
         List<JournalV2> allEntriesOfUser = user.getJournalEntries();
@@ -63,9 +63,8 @@ public class JournalControllerV2 {
     }
 
     @PutMapping("/{username}/{journalId}")
-    public ResponseEntity<JournalV2> updateJournalById(@PathVariable ObjectId journalId, @PathVariable String username, @RequestBody JournalV2 entryToUpdate) {
+    public ResponseEntity<?> updateJournalById(@PathVariable ObjectId journalId, @PathVariable String username, @RequestBody JournalV2 entryToUpdate) {
         Optional<JournalV2> oldEntryOpt = journalServices.getEntryById(journalId);
-
         if (oldEntryOpt.isPresent()) {
             JournalV2 oldEntry = oldEntryOpt.get();
             oldEntry.setTitle(!entryToUpdate.getTitle().isEmpty() ? entryToUpdate.getTitle() : oldEntry.getTitle());
@@ -74,7 +73,7 @@ public class JournalControllerV2 {
             journalServices.saveEntry(oldEntry);
             return new ResponseEntity<>(oldEntry, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Entry not found", HttpStatus.NOT_FOUND);
         }
     }
 
