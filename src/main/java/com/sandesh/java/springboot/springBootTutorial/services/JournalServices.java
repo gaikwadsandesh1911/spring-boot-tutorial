@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLOutput;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,30 +17,29 @@ import java.util.Optional;
 public class JournalServices {
     @Autowired
     private JournalRepository journalRepository;
-    // field based dependency injection
-    // it's an interface so, it's implementation will write here. we have pre-built methods MangoRepository
 
     @Autowired
     private UserServices userServices;
 
+
     @Transactional
     public void saveEntry(JournalV2 journalV2, String username) {
         try {
-            User user = userServices.findUserByUsername(username);
             journalV2.setDate(LocalDateTime.now());
             JournalV2 saved = journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
+            User user = userServices.findUserByUsername(username);
             user.getJournalEntries().add(saved);    // add entry ref(_id) to user's journalEntries field
 //            user.setUsername(null);
             userServices.saveUser(user);    // save the entry in users collection
-        }catch (Exception e){
-            System.out.println("exception => "+ e);
+        } catch (Exception e) {
+            System.out.println("exception => " + e);
             throw new RuntimeException("an error occurred while saving journal entry", e);
         }
     }
 
     // this is for updating entry
     public void saveEntry(JournalV2 journalV2) {
-       journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
+        journalRepository.save(journalV2);  // save() is from spring data jpa. saving entry to journals collection.
     }
 
     public List<JournalV2> getAllEntries() {
@@ -50,12 +50,24 @@ public class JournalServices {
         return journalRepository.findById(id);
     }
 
-    public void deleteEntryById(ObjectId id, String username) {
-        User user = userServices.findUserByUsername(username);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));   // delete ref of journal from users collection as well.
-        userServices.saveUser(user);
-        journalRepository.deleteById(id);
+    @Transactional
+    public boolean deleteEntryById(ObjectId id, String username) {
+        try {
+            // we have to delete ref of journal from users collection also if id is present in users journalEntries field
+            User user = userServices.findUserByUsername(username);
+            boolean removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if (removed) {
+                userServices.saveUser(user);
+                journalRepository.deleteById(id);
+            }
+            return  removed;
+
+        } catch (Exception e) {
+            System.out.println("Delete entry by id exception " + e.getMessage());
+            throw new RuntimeException("An error occurred during delete journal by id");
+        }
     }
+
 
 }
 
@@ -69,4 +81,15 @@ public class JournalServices {
      1. field based
      2. constructor based
      3. setter based
+
+     @Transactional => annotation
+
+     Methods annotated with @Transactional are wrapped in a transactional context,
+     meaning all operations within the method are part of a single transaction.
+     If any operation fails, the entire transaction is rolled back.
+
+     @EnableTransactionManagement is essential for enabling the use of @Transactional.
+      Without it, @Transactional annotations won’t work.
+
+      in config package we have made class TransactionConfig where we used @EnableTransactionManagement
 */

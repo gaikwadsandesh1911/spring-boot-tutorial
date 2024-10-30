@@ -23,12 +23,13 @@ public class TransactionConfig {
     method with @Transactional annotation, whatever we do will treat as single operation
     if one operation fail, all should treat as fail, and any operation  succeed will roll back it.
 
+    PlatformTransactionManager is a central interface in Spring's transaction management framework.
     PlatformTransactionManager interface do all this commit, rollback operation with
-     it's implementation class MongoTransactionManager.
+     it's implementation class MongoTransactionManager for mongodb. DataSourceTransactionManager for postgresql
 
     we have to configure it to create bean using method with @Bean annotation on method.
 
     MongoDatabaseFactory help us to make connection with database. and session means TransactionContext.
 
-    ** inside mongodb database replica is necessary Transaction happen.
+    ** inside mongodb database replica is necessary Transaction to happen.
 */
