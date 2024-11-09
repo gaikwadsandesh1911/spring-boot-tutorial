@@ -14,6 +14,7 @@ public class TransactionConfig {
     public PlatformTransactionManager platformTransactionManager(MongoDatabaseFactory dbFactory){
         return  new MongoTransactionManager(dbFactory);
     }
+    //DataSourceTransactionManager for postgresql
 }
 
 /*
