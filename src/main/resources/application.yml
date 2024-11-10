@@ -1,11 +1,15 @@
-spring:
-  application:
-    name: springBootTutorial
-  data:
-    mongodb:
-      uri: mongodb+srv://gaikwadsandesh1911:OMazaWj4tbEBAlpQ@cluster0.dcdo3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      database: journalEntries
-      auto-index-creation: true
+#spring:
+#  application:
+#    name: springBootTutorial
+#  data:
+#    mongodb:
+#      uri: mongodb+srv://gaikwadsandesh1911:OMazaWj4tbEBAlpQ@cluster0.dcdo3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+#      database: journalEntries
+#      auto-index-creation: true
+#
+#server:
+#  port: 8081
 
-server:
-  port: 8081
+spring:
+  profiles:
+    active: dev

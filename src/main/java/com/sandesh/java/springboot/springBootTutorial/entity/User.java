@@ -18,8 +18,11 @@ import java.util.List;
 public class User {
     @Id
     private ObjectId id;
-    @Indexed(unique = true) // indexing is not done automatically we have to set property on application.properties file
+
+    /* indexing is not done automatically we have to set property on application.properties file
+    auto-index-creation: true*/
     @NonNull
+    @Indexed(unique = true)
     private String username;
     @NonNull
     private String password;

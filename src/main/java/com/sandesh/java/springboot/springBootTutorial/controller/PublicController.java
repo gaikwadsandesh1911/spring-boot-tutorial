@@ -21,10 +21,10 @@ public class PublicController {
 
     @PostMapping("public/create-user")
     public ResponseEntity<?> createNewUser(@RequestBody User user) {
-        User existingUser = userServices.findUserByUsername(user.getUsername());
-        if(existingUser != null){
-            return new ResponseEntity<>("This username is already taken", HttpStatus.CONFLICT);
-        }
+//        User existingUser = userServices.findUserByUsername(user.getUsername());
+//        if(existingUser != null){
+//            return new ResponseEntity<>("This username is already taken", HttpStatus.CONFLICT);
+//        }
         userServices.saveNewUser(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
