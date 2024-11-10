@@ -31,8 +31,7 @@ public class User {
 
     @DBRef
     private List<JournalV2> journalEntries = new ArrayList<>();
-    // @DBRef holding reference of JournalV2 inside User
-    // or journals _id  inside users journalEntries field;
+    // @DBRef holding reference of JournalV2 inside User (journals _id  inside users journalEntries field;)
 
     // so, on users collections, inside journalEntries field we have
     // ObjectId's of journal created by this user.

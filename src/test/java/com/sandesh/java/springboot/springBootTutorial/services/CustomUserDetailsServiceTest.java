@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 //@SpringBootTest
-public class CustomUserDetailsServiceTest {
+class CustomUserDetailsServiceTest {
 
 //    @Autowired
     @InjectMocks
